@@ -29,7 +29,9 @@ async function executeUploadContract(request, input) {
     body: formData,
   })
 
-  const payload = await response.json().catch(() => ({ error: 'Invalid timeline response' }))
+  const payload = await response
+    .json()
+    .catch(() => ({ error: 'Invalid timeline response' }))
   return NextResponse.json(payload, { status: response.status })
 }
 
@@ -39,14 +41,19 @@ async function executeGetTimeline(request, input) {
     return jsonError('id is required')
   }
 
-  const response = await fetch(`${request.nextUrl.origin}/api/timeline/${encodeURIComponent(id)}`, {
-    method: 'GET',
-    headers: {
-      cookie: request.headers.get('cookie') || '',
+  const response = await fetch(
+    `${request.nextUrl.origin}/api/timeline/${encodeURIComponent(id)}`,
+    {
+      method: 'GET',
+      headers: {
+        cookie: request.headers.get('cookie') || '',
+      },
     },
-  })
+  )
 
-  const payload = await response.json().catch(() => ({ error: 'Invalid timeline response' }))
+  const payload = await response
+    .json()
+    .catch(() => ({ error: 'Invalid timeline response' }))
   return NextResponse.json(payload, { status: response.status })
 }
 
@@ -62,17 +69,22 @@ async function executeExportTimelinePdf(request, input) {
     return jsonError('entries must be an array')
   }
 
-  const response = await fetch(`${request.nextUrl.origin}/api/timeline/${encodeURIComponent(id)}/process`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      cookie: request.headers.get('cookie') || '',
+  const response = await fetch(
+    `${request.nextUrl.origin}/api/timeline/${encodeURIComponent(id)}/process`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        cookie: request.headers.get('cookie') || '',
+      },
+      body: JSON.stringify({ entries }),
     },
-    body: JSON.stringify({ entries }),
-  })
+  )
 
   if (!response.ok) {
-    const payload = await response.json().catch(() => ({ error: 'Export failed' }))
+    const payload = await response
+      .json()
+      .catch(() => ({ error: 'Export failed' }))
     return NextResponse.json(payload, { status: response.status })
   }
 

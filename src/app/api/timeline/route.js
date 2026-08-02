@@ -1,14 +1,14 @@
-import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 import { processContract } from '@/core/processContract'
+import { getAuth } from '@/lib/auth'
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads')
 
 export async function POST(request) {
-  const { userId } = await auth()
+  const { userId } = await getAuth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {
