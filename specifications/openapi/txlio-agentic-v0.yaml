@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: Txlio Agentic API
+  version: 0.1.0
+  description: AI-facing contract ingestion and timeline workflows.
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/timeline:
+    post:
+      operationId: uploadContract
+      summary: Upload contract and create timeline draft
+      responses:
+        '200':
+          description: Timeline draft created
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+  /api/timeline/{id}:
+    get:
+      operationId: getTimeline
+      summary: Retrieve timeline by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Timeline details
+        '401':
+          description: Unauthorized
+        '500':
+          description: Processing or retrieval error
+  /api/timeline/{id}/process:
+    post:
+      operationId: exportTimelinePdf
+      summary: Export reviewed timeline entries as PDF
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PDF export
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+        '500':
+          description: Export failure
+  /api/ai/tools:
+    get:
+      operationId: listAiTools
+      summary: Return Txlio AI tool catalog metadata
+      responses:
+        '200':
+          description: Tool catalog
+        '401':
+          description: Unauthorized
+  /api/ai/tools/execute:
+    post:
+      operationId: executeAiTool
+      summary: Execute a catalog tool against timeline APIs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tool
+                - input
+              properties:
+                tool:
+                  type: string
+                  enum:
+                    - upload_contract
+                    - get_timeline
+                    - export_timeline_pdf
+                input:
+                  type: object
+                  additionalProperties: true
+      responses:
+        '200':
+          description: Tool execution result
+        '400':
+          description: Invalid tool input
+        '401':
+          description: Unauthorized
+        '500':
+          description: Tool execution failure
