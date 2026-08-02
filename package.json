@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint",
-    "local:supabase:start": "supabase start --network-id txlio-supabase-net --exclude logflare,vector,mailpit",
+    "local:supabase:start": "supabase start --exclude logflare,vector,mailpit",
     "local:supabase:stop": "supabase stop",
     "local:supabase:status": "supabase status",
     "local:supabase:reset": "supabase db reset --local --yes"

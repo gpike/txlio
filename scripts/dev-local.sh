@@ -7,7 +7,7 @@ if ! command -v supabase >/dev/null 2>&1; then
 fi
 
 echo "Starting local Supabase (Docker)..."
-supabase start --network-id txlio-supabase-net --exclude logflare,vector,mailpit >/dev/null
+supabase start --exclude logflare,vector,mailpit >/dev/null
 
 eval "$(supabase status -o env | awk -F= '
   $1=="API_URL" {print "export NEXT_PUBLIC_SUPABASE_URL=\"" $2 "\""}
