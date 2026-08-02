@@ -1,14 +1,14 @@
-import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { processContract } from '@/core/processContract'
+import { getAuth } from '@/lib/auth'
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads')
 
 // GET /api/timeline/:id — load a transaction's timeline entries
 export async function GET(request, { params }) {
-  const { userId } = await auth()
+  const { userId } = await getAuth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {

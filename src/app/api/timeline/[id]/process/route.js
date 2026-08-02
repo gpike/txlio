@@ -1,14 +1,14 @@
-import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { join } from 'path'
 import { exportTimelinePdf } from '@/core/exportTimelinePdf'
 import { readFile, mkdir } from 'fs/promises'
+import { getAuth } from '@/lib/auth'
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads')
 
 // POST /api/timeline/:id/process — export PDF with reviewed entries
 export async function POST(request, { params }) {
-  const { userId } = await auth()
+  const { userId } = await getAuth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {
